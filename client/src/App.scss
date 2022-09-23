@@ -1,0 +1,86 @@
+body {
+  font-family: "Muli", sans-serif;
+  font-weight: 300;
+  background-color: #e2e8f0;
+  padding: 40px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0.05rem;
+  font-size: .8em;
+  font-weight: 400;
+  color: #222;
+}
+
+.app {
+  display: flex;
+  max-width: 1400px;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 auto;
+}
+
+.container {
+  flex-grow: 1;
+  margin: 0 20px;
+  background-color: #fff;
+  border: 1px solid #cbd5e0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 0.375rem;
+  padding: 40px;
+
+  label {
+    margin: 10px 0;
+  }
+
+  .button {
+    margin-top: 10px;
+  }
+}
+
+input {
+  padding: 10px 0;
+  border-radius: 0.125rem;
+  border: 1px solid rgb(226, 232, 240);
+  background-color: #fdfdfe;
+  padding-inline-start: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.button {
+  background-color: #319795;
+  border-radius: 0.125rem;
+  padding: 10px 20px;
+  color: white;
+  display: inline-flex;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 400;
+  font-size: .9em;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.wallet {
+  display: flex;
+  flex-direction: column;
+
+  .balance {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-size: .9em;
+    display: inline-flex;
+    margin-top: 10px;
+    padding: 0.75rem;
+    background-color: #f4f6f8;
+  }
+}
+
+.transfer {
+  display: flex;
+  flex-direction: column;
+}
