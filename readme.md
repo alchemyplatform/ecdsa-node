@@ -10,7 +10,7 @@ The client folder contains a [react app](https://reactjs.org/) using [vite](http
 
 1. Open up a terminal in the `/client` folder
 2. Run `npm install` to install all the depedencies
-3. Run `npm dev` to start the application 
+3. Run `npm run dev` to start the application 
 4. Now you should be able to visit the app at http://127.0.0.1:5173/
 
 ### Server
