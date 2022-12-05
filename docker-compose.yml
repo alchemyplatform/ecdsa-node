@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+   node-server:
+     tty: true
+     build:
+        context: .
+        dockerfile: docker/nodejs/Dockerfile
+     ports:
+       - 3042:3042
+       - 5173:5173
+     restart: unless-stopped
+     volumes:
+        - ./:/app
