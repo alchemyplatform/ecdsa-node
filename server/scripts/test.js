@@ -28,18 +28,18 @@ const msgHash = keccak224(utf8ToBytes(newTransactionStr))
 async function signMessage(hashedMessage) {
     return await secp.sign(hashedMessage, privateKey, { "recovered": true })
 }
-// signMessage(msgHash).then(
-//     (res) => {
-//         console.log("Signature: " + secp.utils.bytesToHex(res[0]))
-//         const isVerified = secp.verify(res[0], msgHash, publicKey)
-//         console.log("isVerified: " + isVerified)
-//     },
-//     (err) => alert(err)
-// )
+signMessage(msgHash).then(
+    (res) => {
+        console.log("Signature: " + secp.utils.bytesToHex(res[0]))
+        const isVerified = secp.verify(res[0], msgHash, publicKey)
+        console.log("isVerified: " + isVerified)
+    },
+    (err) => alert(err)
+)
 
-const signature = signMessage(msgHash).resolve()
-console.log("Signature: " + signature)
-const isVerified = secp.verify(signature[0], msgHash, publicKey)
-console.log("isVerified: " + isVerified)
+// const signature = signMessage(msgHash).resolve()
+// console.log("Signature: " + signature)
+// const isVerified = secp.verify(signature[0], msgHash, publicKey)
+// console.log("isVerified: " + isVerified)
 
 

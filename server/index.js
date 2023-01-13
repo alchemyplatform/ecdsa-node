@@ -10,9 +10,9 @@ app.use(cors());
 app.use(express.json());
 
 const balances = {
-  "0x1cad49ffd4d4945b09c2133e8e5c37462d5171d271bb78f13e100c9a": 100,
-  "0x964049308d9f1c8f95291ad60731e4308add04454cf45cf20abf301a": 50,
-  "0xad8a29d5dddcda8a44a04b897ba881d86b0e27275b7bd91a96496e9f": 75,
+  "04417b6f32e5a6136cbd025aec2ac0089230b08d338708354aa9babfaf2009662150a34732c9e91f8794a99a8bf9981eabe40572fef86bd0d7e60b3fbeb28cb8a5": 100,
+  "04d1f0a3db14faac1a186db07f0ce56f38b5ac24215c911c80ff432d3cdf363527ecbda5ce8d69995c958ee918814a3e992dde236352d99b281e90b144960ba4ef": 50,
+  "04dd58123465df8813b308b35b8ab6614bb67e96a914304d585c87bf9fabdc39a22423dbd466a0a3a3c74b2166b6799965a13fc6db997301fae12fdca35dce8d33": 75,
 };
 
 app.get("/balance/:address", (req, res) => {
@@ -33,25 +33,23 @@ app.post("/send", (req, res) => {
     "recipient": recipient
   }
   const txDataHash = keccak224(utf8ToBytes(JSON.stringify(txData)))
-  console.log("Server:  ---- sender:  " +  sender)
-  console.log("Server:  ---- rec:  " +  recipient)
-  console.log("Server:  ---- amount:  " +  amount)
-  console.log("Server:  ---- signature:  " +  signature)
-  console.log("Server:  ---- pubKey:  " +  pubKey)
+
+  const pubKeyBytes = secp.utils.hexToBytes(sender)  
+  const signatureBytes = secp.utils.hexToBytes(signature)
   
-  // Verify the signature
   if (balances[sender] < amount) {
-    console.log("Made it to the sending part")
+    console.log("Failed because of insufficient funds")
     res.status(400).send({ message: "Not enough funds!" });
   } else {
-    console.log("in else statement server")
-    if (secp.verify(signature, txDataHash, pubKey)) {
+    console.log("Starting signature verification")
+    if (secp.verify(signatureBytes, txDataHash, pubKeyBytes)) {
+      console.log("Verified signature...")
       balances[sender] -= amount;
       balances[recipient] += amount;
       res.send({ balance: balances[sender] });
     } else {
-      console.log("Failed to verify")
-      res.status(405).send({ message: "Verification failed"})
+      console.log("Failed to verify message")
+      res.status(400).send({ message: "Verification failed"})
     }
   }
 });

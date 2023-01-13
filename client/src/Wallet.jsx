@@ -1,6 +1,6 @@
 import server from "./server";
 
-function Wallet({ address, setAddress, privateKey, setPrivateKey, balance, setBalance }) {
+function Wallet({ address, setAddress, balance, setBalance }) {
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 

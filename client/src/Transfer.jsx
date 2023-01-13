@@ -14,24 +14,22 @@ function Transfer({ address, setBalance }) {
   async function transfer(evt) {
     evt.preventDefault();
 
-    // Sign the transaction with the private key
+    // Create a transaction object
     const txData = {
       "sender": address,
       "amount": parseInt(sendAmount),
       "recipient": recipient
     }
+
+    // Hash tx object
     const txDataHash = keccak224(utf8ToBytes(JSON.stringify(txData)))
-    console.log("sender: " + address)
-    console.log("amount: " + sendAmount)
-    console.log("recipient: " + recipient)
 
+    // Sign the tx hash with private keys
     const privKeyBytes = secp.utils.hexToBytes(privateKey)
-    console.log("private key bytes: " + privKeyBytes)
-
     const signature = await secp.sign(txDataHash, privKeyBytes, { "recovered": true })
 
+    // Get the public key for the sender
     const pubKey = secp.getPublicKey(privKeyBytes)
-    console.log("pub key: " + pubKey)
 
     try {
       const {
@@ -41,7 +39,6 @@ function Transfer({ address, setBalance }) {
         recipient,
         amount: parseInt(sendAmount),
         signature: toHex(signature[0]),
-        pubKey: toHex(pubKey)
       });
       setBalance(balance);
     } catch (ex) {
