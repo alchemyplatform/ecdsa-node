@@ -4,21 +4,16 @@ const { utf8ToBytes, toHex } = require("ethereum-cryptography/utils")
 const prompt = require("prompt-sync")()
 
 const amount = prompt("How much are you sending? : ")
-const recipient = prompt("What is the address of the recipient? : ")
+// const recipient = prompt("What is the address of the recipient? : ")
 const privateKey = prompt("Please input your private key : ")
 
-const pubKey = secp.getPublicKey(secp.utils.hexToBytes(privateKey))
-console.log("pub key: " + toHex(pubKey))
+// const pubKey = secp.getPublicKey(secp.utils.hexToBytes(privateKey))
 
 console.log("Signing transaction")
 const txData = {
-    "sender": pubKey,
     "amount": parseInt(amount),
-    "recipient": recipient
 }
 const txDataHash = keccak224(utf8ToBytes(JSON.stringify(txData)))
-console.log("TX hash: " + txDataHash)
-
 const privateKeyBytes = secp.utils.hexToBytes(privateKey)
 
 async function signMessage(hashedMessage, privKey) {

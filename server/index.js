@@ -22,41 +22,33 @@ app.get("/balance/:address", (req, res) => {
 });
 
 app.post("/send", (req, res) => {
-  const { sender, recipient, amount, signature } = req.body;
+  const { sender, recipient, amount, signature, recovery } = req.body;
 
   setInitialBalance(sender);
   setInitialBalance(recipient);
 
   const txData = {
-    "sender": sender,
-    "amount": amount,
-    "recipient": recipient
+    "amount": parseInt(amount)
   }
   const txDataHash = keccak224(utf8ToBytes(JSON.stringify(txData)))
-  console.log('TX Hahs server: ' + txDataHash)
-
   const signatureBytes = secp.utils.hexToBytes(signature)
 
   // Public key from signature
-  const recoveredPubKey = secp.recoverPublicKey(txDataHash, signatureBytes, 0)
-  console.log("Public key from signature: " + toHex(recoveredPubKey))
-  console.log("Sender: " + sender)
+  const recoveredPubKey = secp.recoverPublicKey(txDataHash, signature, recovery)
+  const recoveredSenderAddress = secp.utils.bytesToHex(recoveredPubKey)
+  console.log("Public key from signature: " + recoveredSenderAddress)
 
-  // Public key from predefined sender address
-  const pubKeyBytes = secp.utils.hexToBytes(sender)  
-
-  
   if (balances[sender] < amount) {
     console.log("Failed because of insufficient funds")
     res.status(400).send({ message: "Not enough funds!" });
   } else {
     console.log("Starting signature verification")
       // Compare the public keys
-    if (recoveredPubKey !== pubKeyBytes) {
+    if (recoveredSenderAddress !== sender) {
       console.log("Sender did not sign transaction")
       res.status(400).send({ message: "Sender did not sign transaction" })
     }
-    else if (secp.verify(signatureBytes, txDataHash, pubKeyBytes)) {
+    else if (secp.verify(signatureBytes, txDataHash, sender)) {
       console.log("Verified signature...")
       balances[sender] -= amount;
       balances[recipient] += amount;

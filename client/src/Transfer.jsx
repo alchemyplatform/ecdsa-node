@@ -8,6 +8,7 @@ function Transfer({ address, setBalance }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
   const [signature, setSignature] = useState("");
+  const [recoveryBit, setRecoveryBit] = useState("");
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
@@ -21,7 +22,8 @@ function Transfer({ address, setBalance }) {
         sender: address,
         recipient,
         amount: parseInt(sendAmount),
-        signature: signature
+        signature: signature,
+        recovery: parseInt(recoveryBit)
       });
       setBalance(balance);
     } catch (ex) {
@@ -37,9 +39,18 @@ function Transfer({ address, setBalance }) {
       <label>
         Signature
         <input
-          placeholder="Please input signature"
+          placeholder="Please input signature..."
           value={signature}
           onChange={setValue(setSignature)}
+        ></input>
+      </label>
+
+      <label>
+        Recovery Bit 
+        <input
+          placeholder="Please input recovery bit..."
+          value={recoveryBit}
+          onChange={setValue(setRecoveryBit)}
         ></input>
       </label>
 
