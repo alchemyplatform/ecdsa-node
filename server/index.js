@@ -10,9 +10,9 @@ app.use(cors());
 app.use(express.json());
 
 const balances = {
-  "04417b6f32e5a6136cbd025aec2ac0089230b08d338708354aa9babfaf2009662150a34732c9e91f8794a99a8bf9981eabe40572fef86bd0d7e60b3fbeb28cb8a5": 100,
-  "04d1f0a3db14faac1a186db07f0ce56f38b5ac24215c911c80ff432d3cdf363527ecbda5ce8d69995c958ee918814a3e992dde236352d99b281e90b144960ba4ef": 50,
-  "04dd58123465df8813b308b35b8ab6614bb67e96a914304d585c87bf9fabdc39a22423dbd466a0a3a3c74b2166b6799965a13fc6db997301fae12fdca35dce8d33": 75,
+  "d0c2188fe7ed67fe888c56c5a8e56f1f9576e668": 100,
+  "2fd5d8f5a3c4c4fd0ec636ac56afd0f80a9926ff": 50,
+  "fcf3aa09cf11b6275cb294afc4281ea18e539927": 75,
 };
 
 app.get("/balance/:address", (req, res) => {
@@ -35,8 +35,9 @@ app.post("/send", (req, res) => {
 
   // Public key from signature
   const recoveredPubKey = secp.recoverPublicKey(txDataHash, signature, recovery)
-  const recoveredSenderAddress = secp.utils.bytesToHex(recoveredPubKey)
-  console.log("Public key from signature: " + recoveredSenderAddress)
+  const preformatRecoveredAddress = recoveredPubKey.slice(1)
+  const recoveredAddress = keccak224(preformatRecoveredAddress).slice(-20)
+  console.log("Public key from signature: " + toHex(recoveredAddress))
 
   if (balances[sender] < amount) {
     console.log("Failed because of insufficient funds")
@@ -44,11 +45,11 @@ app.post("/send", (req, res) => {
   } else {
     console.log("Starting signature verification")
       // Compare the public keys
-    if (recoveredSenderAddress !== sender) {
+    if (toHex(recoveredAddress) !== sender) {
       console.log("Sender did not sign transaction")
       res.status(400).send({ message: "Sender did not sign transaction" })
     }
-    else if (secp.verify(signatureBytes, txDataHash, sender)) {
+    else if (secp.verify(signatureBytes, txDataHash, recoveredPubKey)) {
       console.log("Verified signature...")
       balances[sender] -= amount;
       balances[recipient] += amount;
