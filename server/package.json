@@ -12,6 +12,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "ethereum-cryptography": "^1.1.2",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "prompt-sync": "^4.2.0"
   }
 }
