@@ -40,9 +40,5 @@ signMessage(msgHash).then(
     (err) => alert(err)
 )
 
-// const signature = signMessage(msgHash).resolve()
-// console.log("Signature: " + signature)
-// const isVerified = secp.verify(signature[0], msgHash, publicKey)
-// console.log("isVerified: " + isVerified)
 
 

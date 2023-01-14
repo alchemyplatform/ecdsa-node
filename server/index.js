@@ -37,7 +37,6 @@ app.post("/send", (req, res) => {
   const recoveredPubKey = secp.recoverPublicKey(txDataHash, signature, recovery)
   const preformatRecoveredAddress = recoveredPubKey.slice(1)
   const recoveredAddress = keccak224(preformatRecoveredAddress).slice(-20)
-  console.log("Public key from signature: " + toHex(recoveredAddress))
 
   if (balances[sender] < amount) {
     console.log("Failed because of insufficient funds")
