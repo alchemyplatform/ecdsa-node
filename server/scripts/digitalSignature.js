@@ -9,3 +9,11 @@ const pubKeyToAddress = (pubKey) => {
   return toHex(hash.slice(-20)).toUpperCase();
 };
 
+const signatureToPubKey = (message, signature) => {
+  const hash = hashMessage(message);
+  const fullSignatureBytes = hexToBytes(signature);
+  const recoveryBit = fullSignatureBytes[0];
+  const signatureBytes = fullSignatureBytes.slice(1);
+
+  return secp.recoverPublicKey(hash, signatureBytes, recoveryBit);
+};
