@@ -17,3 +17,9 @@ const signatureToPubKey = (message, signature) => {
 
   return secp.recoverPublicKey(hash, signatureBytes, recoveryBit);
 };
+
+module.exports = {
+  hashMessage,
+  pubKeyToAddress,
+  signatureToPubKey,
+};
