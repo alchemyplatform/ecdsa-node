@@ -2,8 +2,10 @@ import { useState } from "react";
 import server from "./server";
 
 function Transfer({ address, setBalance }) {
-  const [sendAmount, setSendAmount] = useState("");
+  const [messageHash, setSendAmount] = useState("");
+  const [signature, setSign] = useState("");
   const [recipient, setRecipient] = useState("");
+  const [sendAmount, setAmount] = useState("");
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
@@ -15,8 +17,10 @@ function Transfer({ address, setBalance }) {
         data: { balance },
       } = await server.post(`send`, {
         sender: address,
-        amount: parseInt(sendAmount),
+        messageHash,
+        signature,
         recipient,
+        amount: parseInt(sendAmount)
       });
       setBalance(balance);
     } catch (ex) {
@@ -29,20 +33,38 @@ function Transfer({ address, setBalance }) {
       <h1>Send Transaction</h1>
 
       <label>
-        Send Amount
-        <input
-          placeholder="1, 2, 3..."
-          value={sendAmount}
-          onChange={setValue(setSendAmount)}
-        ></input>
-      </label>
-
-      <label>
         Recipient
         <input
           placeholder="Type an address, for example: 0x2"
           value={recipient}
           onChange={setValue(setRecipient)}
+        ></input>
+      </label>
+
+      <label>
+        Amount
+        <input
+          placeholder="Enter Amount here"
+          value={sendAmount}
+          onChange={setValue(setAmount)}
+        ></input>
+      </label>
+
+      <label>
+        MessageHash
+        <input
+          placeholder="Enter Message Hash"
+          value={messageHash}
+          onChange={setValue(setSendAmount)}
+        ></input>
+      </label>
+
+      <label>
+        Signature
+        <input
+          placeholder="Signature Here"
+          value={signature}
+          onChange={setValue(setSign)}
         ></input>
       </label>
 

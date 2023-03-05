@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "ethereum-cryptography": "^1.2.0"
+  }
+}
