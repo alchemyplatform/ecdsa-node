@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "buffer": "^6.0.3",
+    "ethereum-cryptography": "^1.2.0",
+    "ethereumjs-tx": "^2.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
