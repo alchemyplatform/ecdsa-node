@@ -1,15 +1,17 @@
-const express = require("express");
+// const express = require("express");
+import express from 'express';
 const app = express();
-const cors = require("cors");
+import cors from "cors";
+// const cors = require("cors");
 const port = 3042;
 
 app.use(cors());
 app.use(express.json());
 
 const balances = {
-  "0x1": 100,
-  "0x2": 50,
-  "0x3": 75,
+  "028717a3b0e8bd0e0f3c1323ff3c59c96e447a85cf782ef863ee84647fa2654225": 100,
+  "0277f13a7ea7a556dd76ab556ff7c934b4f0bcab2cd2e4eda0f3ccbd7c01daecbf": 50,
+  "021717620815f3e936e0593835f89071458e74507e44af20c9cd91ccba4b653e09": 75,
 };
 
 app.get("/balance/:address", (req, res) => {
@@ -19,6 +21,9 @@ app.get("/balance/:address", (req, res) => {
 });
 
 app.post("/send", (req, res) => {
+  // TODO: get a signature from the client-side application
+  // recover the  public address from the signature
+
   const { sender, recipient, amount } = req.body;
 
   setInitialBalance(sender);
