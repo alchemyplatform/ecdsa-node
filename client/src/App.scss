@@ -9,9 +9,10 @@ label {
   display: flex;
   flex-direction: column;
   letter-spacing: 0.05rem;
-  font-size: .8em;
+  font-size: 1.0em;
   font-weight: 400;
-  color: #222;
+  color:#f1356d;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .app {
@@ -26,7 +27,7 @@ label {
   flex-grow: 1;
   margin: 0 20px;
   background-color: #fff;
-  border: 1px solid #cbd5e0;
+  border: 1px solid #f1356d;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   border-radius: 0.375rem;
   padding: 40px;
@@ -47,26 +48,32 @@ input {
   background-color: #fdfdfe;
   padding-inline-start: 0.75rem;
   font-size: 0.875rem;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
-.button {
-  background-color: #319795;
-  border-radius: 0.125rem;
+.button {  // The transfer button
+  background-color: #f1356d; 
+  border-radius: 8px;
   padding: 10px 20px;
   color: white;
   display: inline-flex;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 400;
-  font-size: .9em;
+  font-size: 0.9em;
+  font-weight: bold;
   &:hover {
     cursor: pointer;
+    background-color:#ffe2eb;
+    color: #f1356d;
   }
 }
 
 .wallet {
   display: flex;
   flex-direction: column;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 
   .balance {
     text-transform: uppercase;
@@ -76,11 +83,15 @@ input {
     display: inline-flex;
     margin-top: 10px;
     padding: 0.75rem;
+    font-weight: bold;
+    // color: #f1356d;
     background-color: #f4f6f8;
+    font-size: medium;
   }
 }
 
 .transfer {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   display: flex;
   flex-direction: column;
 }

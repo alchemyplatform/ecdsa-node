@@ -4,7 +4,7 @@ import server from "./server";
 // const { utf8ToBytes } = require("ethereum-cryptography/utils");
 // const hashMessage = require('./hashMessage');
 
-function Wallet({ address, setAddress, balance, setBalance, privateKey, setprivatekey }) {
+function Wallet({ address, setAddress, balance, setBalance }) {
   async function onChange(evt) {
     const address = evt.target.value;
 

@@ -4,7 +4,6 @@ const cors = require("cors");
 const port = 3042;
 const { keccak256 } = require("ethereum-cryptography/keccak");
 const { utf8ToBytes } = require("ethereum-cryptography/utils");
-// const { hexToUtf8 } = require("ethereum-cryptography/utils");
 const { secp256k1 } =  require("ethereum-cryptography/secp256k1.js");
 const secp = require("ethereum-cryptography/secp256k1");
 const {toHex} = require("ethereum-cryptography/utils");
@@ -16,7 +15,7 @@ app.use(express.json());
 const balances = {
   "03d744dc7a618e2f63a93df35c3417c1e89a89519daff307ced45c16330b850bb5": 100, // 509d9ff9bb5700b0f4e8ecbb33db7250f78b780c8560809ef067247fe3c39841
   "02702dd1cd7a36e8078eeec404fc5957a66870417fdee271e3b14de2b7637a4927": 50, // 2b584df48dcf617b6a695c4cf472a0bd255c873c61b26c39be36de3649a1ca23
-  "0283f8a7ea97add16d3b6cbb246b281c010955b399d6e0d401bc06a0e0d14de2cb": 75, // a149e3c464514dbac65d2019c1f68622301d02373a9dd9c8ae0c75d3411e2248
+  "0283f8a7ea97add16d3b6cbb246b281c010955b399d6e0d401bc06a0e0d14de2cb": 75 // a149e3c464514dbac65d2019c1f68622301d02373a9dd9c8ae0c75d3411e2248
 };
 
 app.get("/balance/:address", (req, res) => {
