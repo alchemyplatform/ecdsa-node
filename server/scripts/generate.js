@@ -8,3 +8,11 @@ console.log("//",privateKeyBytes);
 
 const publickey = toHex(secp.secp256k1.getPublicKey(privatekey)); 
 console.log(publickey);
+
+const { createPrivateKeySync, ecdsaSign } = require("ethereum-cryptography/secp256k1-compat");
+const msgHash = Uint8Array.from(
+  "82ff40c0a986c6a5cfad4ddf4c3aa6996f1a7837f9c398e17e5de5cbd5a12b28",
+  "hex"
+);
+const privateKey = createPrivateKeySync();
+console.log(Uint8Array.from(ecdsaSign(msgHash, privateKey).signature));
