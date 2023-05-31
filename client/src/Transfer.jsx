@@ -4,6 +4,7 @@ import server from "./server";
 function Transfer({ address, setBalance }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
+  const [privateKey, setPrivateKey] = useState("");
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
@@ -14,7 +15,7 @@ function Transfer({ address, setBalance }) {
       const {
         data: { balance },
       } = await server.post(`send`, {
-        sender: address,
+        sender: privateKey,
         amount: parseInt(sendAmount),
         recipient,
       });
@@ -35,6 +36,14 @@ function Transfer({ address, setBalance }) {
           value={sendAmount}
           onChange={setValue(setSendAmount)}
         ></input>
+      </label>
+
+      <label>
+        Sender
+        <input 
+          placeholder="Type your private key"
+          value={privateKey}
+          onChange={setValue(setPrivateKey)}/>
       </label>
 
       <label>

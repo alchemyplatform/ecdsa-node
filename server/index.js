@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = 3042;
+const { keccak256 } = require("ethereum-cryptography/keccak");
+const { utf8ToBytes } = require("ethereum-cryptography/utils");
+const secp = require("ethereum-cryptography/secp256k1");
 
 app.use(cors());
 app.use(express.json());
@@ -19,8 +22,10 @@ app.get("/balance/:address", (req, res) => {
 });
 
 app.post("/send", (req, res) => {
-  const { sender, recipient, amount } = req.body;
-
+  const { privateKey, recipient, amount } = req.body;
+  const hash = keccak256(utf8ToBytes((`${recipient} ${amount}`)));
+  const {signature, recoveryBit} = secp.sign(hash,privateKey, {recovered: true});
+  const sender = secp.recoverPublicKey(hash, signature, recoveryBit, isCompressed = false);
   setInitialBalance(sender);
   setInitialBalance(recipient);
 

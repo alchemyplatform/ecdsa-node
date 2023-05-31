@@ -1,8 +1,13 @@
 import server from "./server";
+// import * as secp from "ethereum-cryptography/secp256k1";
+// const { keccak256 } = require("ethereum-cryptography/keccak");
+// const { utf8ToBytes } = require("ethereum-cryptography/utils");
+// const hashMessage = require('./hashMessage');
 
-function Wallet({ address, setAddress, balance, setBalance }) {
+function Wallet({ address, setAddress, balance, setBalance, privateKey, setprivatekey }) {
   async function onChange(evt) {
     const address = evt.target.value;
+
     setAddress(address);
     if (address) {
       const {
@@ -16,11 +21,11 @@ function Wallet({ address, setAddress, balance, setBalance }) {
 
   return (
     <div className="container wallet">
-      <h1>Your Wallet</h1>
+      <h1>Check your Wallet Balance</h1>
 
       <label>
         Wallet Address
-        <input placeholder="Type an address, for example: 0x1" value={address} onChange={onChange}></input>
+        <input placeholder="Enter your public address to check your balance" value={address} onChange={onChange}></input>
       </label>
 
       <div className="balance">Balance: {balance}</div>
