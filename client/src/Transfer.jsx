@@ -15,7 +15,7 @@ function Transfer({ address, setBalance }) {
       const {
         data: { balance },
       } = await server.post(`send`, {
-        sender: privateKey,
+        privateKey: privateKey,
         amount: parseInt(sendAmount),
         recipient,
       });
@@ -39,7 +39,7 @@ function Transfer({ address, setBalance }) {
       </label>
 
       <label>
-        Sender
+        Sender(Private Key)
         <input 
           placeholder="Type your private key"
           value={privateKey}
@@ -47,7 +47,7 @@ function Transfer({ address, setBalance }) {
       </label>
 
       <label>
-        Recipient
+        Recipient(Public key)
         <input
           placeholder="Type an address, for example: 0x2"
           value={recipient}
