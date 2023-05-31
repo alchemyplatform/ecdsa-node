@@ -24,16 +24,16 @@ app.get("/balance/:address", (req, res) => {
   res.send({ balance });
 });
 
-app.post("/send", async (req, res) => {
+app.post("/send", (req, res) => {
   const { privateKey, recipient, amount } = req.body;
   const hash = keccak256(utf8ToBytes((`${recipient} ${amount}`)));
   const privateKeyBytes = new Uint8Array(privateKey.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-    const signature = await secp256k1.sign(hash,privateKeyBytes);
+    const signature = secp256k1.sign(toHex(hash),privateKeyBytes);
   // const signature = secpNoble.sign(toHex(hash), privateKey);
   // const sender = secpNoble.recoverPublicKey(hash, signature, recoveryBit, isCompressed = false);
-  const sender = signature.recoverPublicKey(hash);
-  console.log(sender.toString);
-  // const sender = toHex(secp256k1.getPublicKey(privateKey)).toString();
+  // const sender = signature.recoverPublicKey(hash, privateKeyBytes); 
+  // console.log(sender.toString);
+  const sender = toHex(secp256k1.getPublicKey(privateKey)).toString();
   setInitialBalance(sender);
   setInitialBalance(recipient);
 
