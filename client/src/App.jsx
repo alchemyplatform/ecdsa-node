@@ -6,6 +6,7 @@ import { useState } from "react";
 function App() {
   const [balance, setBalance] = useState(0);
   const [address, setAddress] = useState("");
+  const [privateKey, setprivateKey] = useState("");
 
   return (
     <div className="app">
@@ -14,6 +15,7 @@ function App() {
         setBalance={setBalance}
         address={address}
         setAddress={setAddress}
+        setprivateKey={setprivateKey}
       />
       <Transfer setBalance={setBalance} address={address} />
     </div>
