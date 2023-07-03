@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import server from "./server";
 
 import * as secp from "ethereum-cryptography/secp256k1";
 import { keccak256 } from "ethereum-cryptography/keccak";
 import { toHex } from "ethereum-cryptography/utils";
 
-function Wallet({ address, setAddress, balance, setBalance, privateKey, setPrivateKey }) {
+function Wallet({ address, setAddress, balance, setBalance, privateKey, setPrivateKey, faucetBalance }) {
   async function onChange(evt) {
     const privateKey = evt.target.value;
     setPrivateKey(privateKey);
@@ -16,16 +17,29 @@ function Wallet({ address, setAddress, balance, setBalance, privateKey, setPriva
 
     setAddress(address);
 
-    if (address) {
-      const {
-        data: { balance },
-      } = await server.get(`balance/${address}`);
-      setBalance(balance);
-    } else {
-      setBalance(0);
-    }
+    //replaced with useEffect below
+    // if (address) {
+    //   const {
+    //     data: { balance },
+    //   } = await server.get(`balance/${address}`);
+    //   setBalance(balance);
+    // } else {
+    //   setBalance(0);
+    // }
   }
 
+  useEffect(() => {
+    async function refreshBalance(){
+      if(address){
+        const {
+          data: { balance },
+        } = await server.get(`balance/${address}`);
+        setBalance(balance);
+      }
+    }
+    refreshBalance();
+  }, [faucetBalance, address]);
+  
   return (
     <div className="container wallet">
       <h1>Your Wallet</h1>
@@ -39,7 +53,7 @@ function Wallet({ address, setAddress, balance, setBalance, privateKey, setPriva
         Address: 0x{address.slice(0,4)}...{address.slice(-4)}
       </label>
 
-      <div className="balance">Balance: {balance}</div>
+      <div className="balance">Balance: {balance} Ξ</div>
     </div>
   );
 }

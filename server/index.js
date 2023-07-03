@@ -6,16 +6,45 @@ const port = 3042;
 app.use(cors());
 app.use(express.json());
 
-const balances = {
-  "0x1": 100, // Alice
-  "0x2": 50,  // Bob
-  "0x3": 75,  // Charlie
+let balances = {
+  //use the faucet to get some funds
+  // "0x1": 50, // Alice
+  // "0x2": 50,  // Bob
+  // "0x3": 75,  // Charlie
 };
+
+let faucetBalance = 1000;
 
 app.get("/balance/:address", (req, res) => {
   const { address } = req.params;
   const balance = balances[address] || 0;
   res.send({ balance });
+});
+
+app.get("/faucetBalance", (req, res) => {
+  res.send({ faucetBalance });
+});
+
+app.post("/receiveFromFaucet", (req, res) => {
+  const { amount, recipient } = req.body;
+
+  //Debug (see server logs)
+  console.log("\nNew request from faucet!");
+  console.log("recipient:", recipient);
+  console.log("faucet balance:", faucetBalance);
+  console.log("requested amount:", amount);
+
+  setInitialBalance(recipient);
+
+  if (amount > faucetBalance) {
+      res.status(400).send({ message: "Not enough funds in Server Faucet!" });
+      console.log("Not enough funds!");
+  } else {
+      faucetBalance -= amount;
+      balances[recipient] += amount;
+      res.send({ newFaucetBalance: faucetBalance });
+      console.log("new faucet balance:", faucetBalance);
+  }
 });
 
 app.post("/send", (req, res) => {
