@@ -44,7 +44,11 @@ function App() {
         setAddress={setAddress}
         faucetBalance={faucetBalance}
       />
-      <Transfer setBalance={setBalance} address={address} />
+      <Transfer 
+        address={address}
+        setBalance={setBalance}
+        privateKey={privateKey}
+      />
     </div>
   );
 }

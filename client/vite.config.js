@@ -7,6 +7,12 @@ export default defineConfig({
   server: {
     watch: {
       usePolling: true
+    },
+    fs: {
+      strict: false
+    },
+    mimeTypes: {
+      'application/javascript': ['js']
     }
   }
 })
