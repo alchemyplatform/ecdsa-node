@@ -11,6 +11,7 @@ function App() {
   const [address, setAddress] = useState("");
   const [privateKey, setPrivateKey] = useState("");
   const [faucetBalance, setFaucetBalance] = useState(0);
+  const [nonce, setNonce] = useState("N/A");
 
   /**
    * Load initial faucet balance from server
@@ -43,8 +44,15 @@ function App() {
         address={address}
         setAddress={setAddress}
         faucetBalance={faucetBalance}
+        nonce={nonce}
+        setNonce={setNonce}
       />
-      <Transfer setBalance={setBalance} address={address} />
+      <Transfer 
+        address={address}
+        setBalance={setBalance}
+        privateKey={privateKey}
+        nonce={nonce}
+      />
     </div>
   );
 }
