@@ -5,7 +5,7 @@ import { toHex } from "ethereum-cryptography/utils"
 
 import server from "./server";
 
-function Transfer({ address, setBalance, privateKey }) {
+function Transfer({ address, setBalance, privateKey, nonce }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
   const [txObj, setTxObj] = useState("");
@@ -29,15 +29,16 @@ function Transfer({ address, setBalance, privateKey }) {
       const tx = {
         sender: from,
         recipient: to,
-        amount: parseInt(sendAmount)
+        amount: parseInt(sendAmount),
+        nonce: nonce
       };
       setTxObj(tx);
       
       // Utilize ethers to prepare the transaction for signing
       const coder = ethers.AbiCoder.defaultAbiCoder();
       const encodedTx = coder.encode(
-        ["address", "address", "uint256"],
-        [tx.sender, tx.recipient, tx.amount]
+        ["address", "address", "uint256", "uint256"],
+        [tx.sender, tx.recipient, tx.amount, tx.nonce]
       );
       //console.log("encodedTx:", encodedTx);
 
@@ -72,7 +73,7 @@ function Transfer({ address, setBalance, privateKey }) {
         } = await server.post(`/transfer`, {
           from: tx.sender,
           to: tx.recipient,
-          amount: parseInt(sendAmount),
+          amount: parseInt(tx.amount),
           signatureString: signatureString,
           hexPublicKey: hexPublicKey
         });
@@ -108,6 +109,8 @@ function Transfer({ address, setBalance, privateKey }) {
         ></input>
       </label>
 
+      <input type="submit" className="button" value="Transfer" />
+
       <label>
         Transaction object
         <textarea
@@ -116,9 +119,8 @@ function Transfer({ address, setBalance, privateKey }) {
           height={txObj ? txObj.length : 0}
         ></textarea>
       </label>
-
-      <input type="submit" className="button" value="Transfer" />
     </form>
+    
   );
 }
 

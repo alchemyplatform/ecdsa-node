@@ -6,7 +6,7 @@ import { keccak256 } from "ethereum-cryptography/keccak";
 import { toHex } from "ethereum-cryptography/utils";
 import { ethers } from "ethers";
 
-function Wallet({ address, setAddress, balance, setBalance, privateKey, setPrivateKey, faucetBalance }) {
+function Wallet({ address, setAddress, balance, setBalance, privateKey, setPrivateKey, faucetBalance, nonce, setNonce }) {
   async function onChange(evt) {
     evt.preventDefault();
 
@@ -37,6 +37,7 @@ function Wallet({ address, setAddress, balance, setBalance, privateKey, setPriva
     }
   }
 
+  //Feched balance from server
   useEffect(() => {
     async function refreshBalance(){
       if(address){
@@ -51,6 +52,22 @@ function Wallet({ address, setAddress, balance, setBalance, privateKey, setPriva
     }
     refreshBalance();
   }, [faucetBalance, address]);
+
+  //Feched nonce from server
+  useEffect(() => {
+    async function refreshNonce(){
+      if(address){
+        const {
+          data: { nonce },
+        } = await server.get(`nonce/${address}`);
+        setNonce(nonce);
+      }
+      else{
+        setNonce("N/A");
+      }
+    }
+    refreshNonce();
+  }, [address, balance]);
   
   return (
     <div className="container wallet">
@@ -63,6 +80,10 @@ function Wallet({ address, setAddress, balance, setBalance, privateKey, setPriva
 
       <label>
         Address: 0x{address.slice(0,4)}...{address.slice(-4)}
+      </label>
+
+      <label>
+        Next nonce: {nonce}
       </label>
 
       <div className="balance">Balance: {balance} Ξ</div>

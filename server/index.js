@@ -15,6 +15,7 @@ let balances = {
   // "0x2": 50,  // Bob
   // "0x3": 75,  // Charlie
 };
+let nonces = {};
 
 let faucetBalance = 1000;
 
@@ -22,6 +23,12 @@ app.get("/balance/:address", (req, res) => {
   const { address } = req.params;
   const balance = balances[address] || 0;
   res.send({ balance });
+});
+
+app.get("/nonce/:address", (req, res) => {
+  const { address } = req.params;
+  const nonce = nonces[address] || 0;
+  res.send({ nonce });
 });
 
 app.get("/faucetBalance", (req, res) => {
@@ -83,15 +90,19 @@ app.post("/transfer", (req, res) => {
     setInitialBalance(sender);
     setInitialBalance(recipient);
 
+    //Initialize nonce if needed
+    setInitialNonce(sender);
+
     //Check if sender has enough funds
     if (balances[sender] < amount) {
       res.status(400).send({ message: "Not enough funds!" });
     } else {
+      console.log("nonce:", nonces[sender]);
       // Recover the hash of the encoded transaction
       const coder = ethers.AbiCoder.defaultAbiCoder();
       const encodedTx = coder.encode(
-        ["address", "address", "uint256"],
-        [from, to, amount],
+        ["address", "address", "uint256", "uint256"],
+        [sender, recipient, amount, nonces[from]],
       );
       const hashedEncodedTx = ethers.keccak256(encodedTx);
 
@@ -122,6 +133,9 @@ app.post("/transfer", (req, res) => {
       balances[sender] -= amount;
       balances[recipient] += amount;
       res.send({ balance: balances[sender] });
+
+      // Increment the nonce for the sender
+      nonces[sender] += 1;
     }
   } else {
     res.status(400).send({ message: "Invalid transfer request!" });
@@ -135,5 +149,11 @@ app.listen(port, () => {
 function setInitialBalance(address) {
   if (!balances[address]) {
     balances[address] = 0;
+  }
+}
+
+function setInitialNonce(address) {
+  if (!nonces[address]) {
+    nonces[address] = 0;
   }
 }

@@ -6,7 +6,7 @@ import server from "./server";
 function Faucet({faucetBalance, setFaucetBalance, address}){
     const [receiveAmount, setReceiveAmount] = useState("");
 
-    const setValue = (setter) => (evt) => setter(evt.target.value);
+    //const setValue = (setter) => (evt) => setter(evt.target.value);
 
     async function receiveEth(evt){
         evt.preventDefault();
