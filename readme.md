@@ -1,3 +1,36 @@
+# My approach
+
+![My approach for "ECDSA-Node"](./docs/AU_ecdsa-node.png)
+
+## Starters
+### Removing structural barriers
+Due to functionality restrictions in the developer VM
+- let nodemon run in legacy mode
+- let vite watch service use polling
+to achieve automatic refreshing and hot reloading.
+
+## Basics
+- [x] Modified the UI that allows the user to enter an private key that is only used locally (not sent to the server)
+- [x] Wallet module can restore publicKey and ethereum address from privateKey
+- [x] Wallet module can request balance from server
+- [x] Wallet module can request nonce from server
+
+- [x] Transfer module creates a signature from a hash of an encoded transaction created with ethers.js consisting of
+    - [x] sender
+    - [x] recipient
+    - [x] amount
+    - [x] nonce
+
+- [x] Server verifies signature by recreating the hashed encoded transaction and inserting its own expectet nonce for the sending address
+
+## Advanced
+- [x] Created a server faucet that allows any address to receive Ether
+- [x] Added `nonce` to the transaction object to prevent replay attacks
+- [x] Played around with useEffect()
+
+---
+---
+
 ## ECDSA Node
 
 This project is an example of using a client and server to facilitate transfers between different addresses. Since there is just a single server on the back-end handling transfers, this is clearly very centralized. We won't worry about distributed consensus for this project.
