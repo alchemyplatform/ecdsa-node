@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:dev": "npx nodemon ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "ethereum-cryptography": "^2.1.2",
     "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
