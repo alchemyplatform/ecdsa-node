@@ -25,7 +25,6 @@ function User({ loggedInUser, setLoggedInUser }) {
             console.log(`doLogin response: ${message}`);
         } catch (ex) {
             console.log(`ex response: ${JSON.stringify(ex)}`)
-            alert(ex);//.data.message);
             if (ex.response.status === 401) {
                 setMessage(`User doesnt exist: ${newUser}`);
             } else {
@@ -45,7 +44,7 @@ function User({ loggedInUser, setLoggedInUser }) {
             // setLoggedInUser(theNewUser);
             console.log(`addNewUser response: ${message}`);
         } catch (ex) {
-            alert(ex);//.data.message);
+            console.log(ex.message);//.data.message);
             setMessage(ex.message);
         }
     }
@@ -56,7 +55,7 @@ function User({ loggedInUser, setLoggedInUser }) {
     }
     return (
         <form className="container login">
-            <h1>Login</h1>
+            <h1>Login</h1> (Browswer - not part of this app as such)
 
             <p>Current user: {loggedInUser}</p>
             <label>
