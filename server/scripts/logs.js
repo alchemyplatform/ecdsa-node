@@ -7,7 +7,7 @@ export const AddressConfig = {
         return privateKey = toHex(secp256k1.utils.randomPrivateKey());
     },
      addressGen (address){
-        return address = toHex(getRandomBytesSync(20));
+        return address = "0x"+toHex(getRandomBytesSync(20));
     },
     balanceLog (){
         return 100;
