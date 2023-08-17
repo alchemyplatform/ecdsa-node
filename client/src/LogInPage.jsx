@@ -1,37 +1,23 @@
-import App from "./App";
-import { useState } from "react";
-import {AddressConfig} from "../../server/scripts/logs.js"
+import React, { useState } from "react";
+import { UsersData } from "../../server/scripts/accounts_array.js";
 
+export const LogInComponent = ({ onLogin }) => {
+  const [address, setAddress] = useState("");
 
-
-function LogIn(){
-
-    const [address, setAddress] = useState("");
-    const [showResult, setShowResult] = useState(false);
-
-    const getAddress = async( )=>{
-        try{
-            const generatedAddress = AddressConfig.addressGen();
-            setAddress(generatedAddress);
-            setShowResult(true);
-
-        }
-        catch(error){
-            console.error("Error generating address:",error);
-        }
-    };
-    return (
-
-        <form className="container login" onSubmit={event => event.preventDefault()}>
-          <h1>Log In</h1>
-    
-          <input type="button" className="button" value="Get the account address" onClick = {getAddress} />
-          <div className="addressOutput">Address: {address}</div> 
-          {showResult ? <App address={address} /> : null}
-        </form>
-      );
-      
-
+  const handleLogin = async () => {
+    try {
+      const userData = UsersData();
+      const generatedAddress = userData.address;
+      setAddress(generatedAddress);
+      onLogin(generatedAddress, userData.balance,userData.privatKey,userData.publicKey);
+    } catch (error) {
+      console.error("Error generating address:", error);
     }
+  };
 
-export default LogIn;
+  return (
+    <form className="container login" onSubmit={(event) => event.preventDefault()}>
+      <input type="button" className="button" value="Get the account address" onClick={handleLogin} />
+    </form>
+  );
+};
