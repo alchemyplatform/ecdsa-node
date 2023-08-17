@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-//import App from "./App";
-import LogInPage from "./LogInPage.jsx";
+import App from "./App";
+//import LogInPage from "./LogInPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <LogInPage />
+    <App />
   </React.StrictMode>
 );

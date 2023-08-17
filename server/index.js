@@ -2,11 +2,12 @@ import express, { json } from "express";
 const app = express();
 import cors from "cors";
 const port = 3042;
+//import {UsersData} from "../../server/scripts/accounts_array.js"
 
 app.use(cors());
 app.use(json());
 
-
+//address = [UsersData.userData];
 app.get("/balance/:address", (req, res) => {
   const { address } = req.params;
   const balance = balances[address] || 0;

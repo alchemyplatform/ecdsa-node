@@ -1,32 +1,79 @@
-import server from "./server";
+import React from "react";
+import { LogInComponent } from "./LogInPage"; // Передбачаючи, що це правильний шлях до компонента LogInPage
+import { arr } from "../../server/scripts/accounts_array.js";
+import Transfer  from "./Transfer";
 
 
-function Wallet({ address, setAddress, balance, setBalance }) {
-  async function onChange(evt) {
-    const address = evt.target.value;
-    setAddress(address);
-    if (address) {
-      const {
-        data: { balance },
-      } = await server.get(`balance/${address}`);
-      setBalance(balance);
+class Wallet extends React.Component {
+  
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      address: "",
+      balance: 0,
+      privatKey: "",
+      publicKey: ""
+    };
+
+  }
+
+  handleLogin = (address, balance,privatKey,publicKey) => {
+    // Отримання даних з компонента LogInPage та оновлення стану Wallet
+    this.setState({
+      address: address,
+      balance: balance,
+      privatKey: privatKey,
+      publicKey: publicKey
+    });
+    //this.props.onLogin(address,balance);
+  }
+  handleAddressChange = (evt) => {
+    this.setState({
+      address: evt.target.value
+    });
+  }
+
+  handleCheckBalance = () => {
+    const foundUser = this.findUserByAddress(this.state.address);
+    if (foundUser) {
+      this.setState({ balance: foundUser.balance });
     } else {
-      setBalance(0);
+      // Якщо адрес не знайдено, можна встановити баланс в 0 або вивести повідомлення
+      this.setState({ balance: 0 });
+       alert("Адрес не знайдено");
     }
   }
 
-  return (
-    <div className="container wallet">
-      <h1>Your Wallet</h1>
-
-      <label>
-        Wallet Address
-        <input placeholder="Type an address, for example: 0x1" value={address} onChange={onChange}></input>
-      </label>
-
-      <div className="balance">Balance: {balance}</div>
-    </div>
-  );
+  findUserByAddress = (address) => {
+    // Пошук користувача за адресою у масиві arr
+    return arr.find((user) => user.address === address);
+  }
+  render() {
+    return (
+      <div className="container wallet">
+        <h1>Your Wallet</h1>
+        <LogInComponent onLogin={this.handleLogin} />
+        <input
+            type="text"
+            value={this.state.address}
+            onChange={this.handleAddressChange}
+            
+          />
+        <div className="balance">Balance: {this.state.balance}</div>
+         <button onClick={this.handleCheckBalance}>Check Balance</button>
+         {/* <Transfer senderAddress={this.state.address} /> */}
+        <h3>Your Data</h3>
+        <p>Keep your privat key in secret !</p>
+        <div className="usersData">
+       <p> Address: {this.state.address}</p>
+       <p>Balance:  {this.state.balance}  </p> 
+       <p> Public Key:  {this.state.publicKey}</p>
+       <p> Privat Key:  {this.state.privatKey}</p>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Wallet;

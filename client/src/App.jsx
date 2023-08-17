@@ -2,20 +2,21 @@ import Wallet from "./Wallet";
 import Transfer from "./Transfer";
 import "./App.scss";
 import { useState } from "react";
+import {LogInComponent} from "./LogInPage.jsx";
 
 function App() {
-  const [balance, setBalance] = useState(0);
-  const [address, setAddress] = useState("");
+  const [loggedInAddress, setLoggedInAddress] = useState(""); 
+  const [loggedInBalance, setLoggedInBalance] = useState(0);
 
+  const handleLogin = (address,balance) => {
+    setLoggedInAddress(address);
+    setLoggedInBalance(balance);
+  };
   return (
     <div className="app">
-      <Wallet
-        balance={balance}
-        setBalance={setBalance}
-        address={address}
-        setAddress={setAddress}
-      />
-      <Transfer setBalance={setBalance} address={address} />
+
+      <Wallet address={loggedInAddress} balance={loggedInBalance} />
+       <Transfer balance={loggedInBalance} address={loggedInAddress} />  
     </div>
   );
 }
