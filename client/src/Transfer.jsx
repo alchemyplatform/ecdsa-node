@@ -3,9 +3,9 @@ import { arr } from "../../server/scripts/accounts_array.js";
 import  Operation  from "../../server/scripts/balance_operation.js";
 import Wallet from "./Wallet.jsx";
  const Transfer = ({ senderAddress }) => {
-  const [sendAmount, setSendAmount] = useState("");
+  const [sendAmount, setSendAmount] = useState(0);
   const [recipient, setRecipient] = useState("");
-  //const [senderAddress, setAddress] = useState(address);
+ // const [senderAddress, setAddress] = useState("");
   const [senderBalance, setBalance] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -14,8 +14,8 @@ import Wallet from "./Wallet.jsx";
   async function transfer(evt) {
     evt.preventDefault();
     CheckSenderAddressValidity();
+    debugger;
   }
-
   const CheckSenderAddressValidity = () => {
     try {
       let validRecipient = false; 
@@ -23,10 +23,12 @@ import Wallet from "./Wallet.jsx";
         if (recipient === arr[i].address) {
           validRecipient = true; 
           setBalance(arr[i].balance);
-          //setAddress(address); //встановити адресу з файлу волет 
+          debugger;
+         // const walletInstance = new Wallet();
+         // setAddress(senderAddress); //встановити адресу з файлу волет 
           setRecipient(arr[i].address); //встановити адресу яку вводить користувач 
           setErrorMessage(""); 
-          CallBalanceChange(sendAmount, senderAddress, recipient);
+          //CallBalanceChange(sendAmount, senderAddress, recipient);
           break;
         }
       }
@@ -37,19 +39,21 @@ import Wallet from "./Wallet.jsx";
       setErrorMessage("Something went wrong: " + error.message);
     }
   };
-  const CallBalanceChange=(sendAmount,senderAddress,recipient)=>{
+  const CallBalanceChange = (sendAmount, senderAddress, recipient,senderBalance) => {
     console.log("CallBalanceChange function called");
     console.log("sendAmount:", sendAmount);
     console.log("senderAddress:", senderAddress);
-    console.log("recipient:", recipient); 
-
+    console.log("recipient:", recipient);
+    console.log("balance", senderBalance);
 
     const operationInstance = new Operation();
     const recipientObj = operationInstance.RecipientChange(recipient);
     const senderObj = operationInstance.SenderChange(senderAddress);
-    const updatedRecipientBalance = operationInstance.updateBalanceForRecipient(recipientObj,sendAmount);
-    const updatedSenderBalance = operationInstance.updateBalanceForSender(senderObj,sendAmount);
-  }
+    const updatedRecipientBalance = operationInstance.updateBalanceForRecipient(recipientObj, sendAmount);
+    const updatedSenderBalance = operationInstance.updateBalanceForSender(senderObj, sendAmount);
+  
+    
+  };
   return (
     <form className="container transfer" onSubmit={transfer}>
       <h1>Send Transaction</h1>

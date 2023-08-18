@@ -13,25 +13,31 @@ class Wallet extends React.Component {
       address: "",
       balance: 0,
       privatKey: "",
-      publicKey: ""
+      publicKey: "",
+      senderAddress:""
     };
 
   }
 
-  handleLogin = (address, balance,privatKey,publicKey) => {
+  handleLogin = (address, balance,privatKey,publicKey,senderAddress) => {
     // Отримання даних з компонента LogInPage та оновлення стану Wallet
     this.setState({
       address: address,
       balance: balance,
       privatKey: privatKey,
-      publicKey: publicKey
+      publicKey: publicKey,
+      senderAddress:address
     });
     //this.props.onLogin(address,balance);
   }
   handleAddressChange = (evt) => {
+    const newAddress = evt.target.value;
     this.setState({
-      address: evt.target.value
+      
+      address: newAddress
     });
+    this.props.onAddressChange(newAddress); 
+    console.log(`Address changed to: ${newAddress}`);
   }
 
   handleCheckBalance = () => {
@@ -56,9 +62,9 @@ class Wallet extends React.Component {
         <LogInComponent onLogin={this.handleLogin} />
         <input
             type="text"
-            value={this.state.address}
+           // value={this.state.address}
             onChange={this.handleAddressChange}
-            
+
           />
         <div className="balance">Balance: {this.state.balance}</div>
          <button onClick={this.handleCheckBalance}>Check Balance</button>

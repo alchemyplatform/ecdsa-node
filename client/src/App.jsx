@@ -2,7 +2,7 @@ import Wallet from "./Wallet";
 import Transfer from "./Transfer";
 import "./App.scss";
 import { useState } from "react";
-import {LogInComponent} from "./LogInPage.jsx";
+
 
 function App() {
   const [loggedInAddress, setLoggedInAddress] = useState(""); 
@@ -12,11 +12,16 @@ function App() {
     setLoggedInAddress(address);
     setLoggedInBalance(balance);
   };
+  const handleAddressChange = (address) => {
+    setLoggedInAddress(address);
+  };
   return (
     <div className="app">
 
-      <Wallet address={loggedInAddress} balance={loggedInBalance} />
-       <Transfer balance={loggedInBalance} address={loggedInAddress} />  
+    <Wallet onLogin={handleLogin} onAddressChange={handleAddressChange} />
+       <Transfer 
+      //  balance={loggedInBalance} 
+       senderAddress={loggedInAddress} />  
     </div>
   );
 }
