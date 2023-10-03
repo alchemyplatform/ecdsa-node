@@ -9,10 +9,14 @@ function Wallet({
   setBalance,
   privateKey,
   setPrivateKey,
+  //sign,
+  //setSign,
 }) {
   async function onChange(evt) {
     const privateKey = evt.target.value;
+    //const sign = evt.target.value;
     setPrivateKey(privateKey);
+    //setSign(sign);
     const address = toHex(secp256k1.getPublicKey(privateKey));
     //const address = secp256k1.getPublicKey(privateKey); b
     setAddress(address);
@@ -31,15 +35,15 @@ function Wallet({
       <h1>Your Wallet</h1>
 
       <label>
-        Priavte Key
+        Private Key
         <input
-          placeholder="Type in a private key"
+          placeholder="Paste the private key"
           value={privateKey}
           onChange={onChange}
         ></input>
       </label>
 
-      <div>Address : 0x{address.slice(0, 15)}...</div>
+      <div>Address : 0x{address.slice(0, 100)}...</div>
 
       <div className="balance">Balance: {balance}</div>
     </div>
