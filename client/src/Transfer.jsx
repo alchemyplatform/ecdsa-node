@@ -1,6 +1,5 @@
 import { useState } from "react";
 import server from "./server";
-//import { signTransaction } from "web3/lib/commonjs/eth.exports";
 
 function Transfer({ address, setBalance }) {
   const [sendAmount, setSendAmount] = useState("");
