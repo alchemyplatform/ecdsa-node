@@ -8,7 +8,7 @@ const messageHash = keccak256(message);
 console.log("Message hash:", messageHash.toString("hex"));
 
 const privateKey = Buffer.from(
-  "23fe669bebc37910f9f91e205f4451de6192a48483c70c5853cddfdacbb1dce9",
+  "0895341cb46a79ef27845eda70febaed408dabf634cbaef33c2e50af81f04fab",
   "hex"
 );
 
