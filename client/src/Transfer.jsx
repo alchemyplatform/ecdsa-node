@@ -2,8 +2,10 @@ import { useState } from "react";
 import server from "./server";
 
 function Transfer({ address, setBalance }) {
+  const [signature, setSignature] = useState("");
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
+  const [isValid, setValid] = useState("");
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
@@ -14,6 +16,7 @@ function Transfer({ address, setBalance }) {
       const {
         data: { balance },
       } = await server.post(`send`, {
+        signature: signature,
         sender: address,
         amount: parseInt(sendAmount),
         recipient,
@@ -24,9 +27,37 @@ function Transfer({ address, setBalance }) {
     }
   }
 
+  async function verification(evt) {
+    const signature = evt.target.value;
+    setSignature(signature);
+
+    if (signature) {
+      const {
+        data: { isValid },
+      } = await server.post(`verify`, {
+        signature,
+        address,
+      });
+      setValid(isValid);
+    } else {
+      setValid("Undefined");
+    }
+  }
+
   return (
     <form className="container transfer" onSubmit={transfer}>
       <h1>Send Transaction</h1>
+
+      <label>
+        Verify
+        <input
+          placeholder="hex signature"
+          value={signature}
+          onChange={verification}
+        ></input>
+      </label>
+
+      <div className="Verification">Verification status: {isValid}</div>
 
       <label>
         Send Amount
