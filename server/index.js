@@ -10,11 +10,11 @@ app.use(cors());
 app.use(express.json());
 
 const balances = {
-  "709701284bfe051e877a9aa216ddab7876127441": 100,
-  "0862a3d688b75242b710977299f343453e5cf082": 50,
-  "55abbbf5177640b7241f6eeb2e4174acbbe44413": 75,
-  "b6d01fada5df2e963c888f645742c3fb76da1fd2": 1000,
-  "8990e147072b8227e0d028630ff4fbf256cae484": 1000,
+  "2c66c985fa79c326a669e1d282737a0ada49cab9": 100,
+  "87a4bc900a35dfc47df11719045c26dc34fc2df4": 50,
+  "c0cbb5992f0825f389084400f59f3686bc713822": 75,
+  "7dd8df87cca8a988fffd302e7c8486e90f4e6695": 1000,
+  "3777d9a62dbde165d771448a8d9bed685511ec3f": 1000,
 };
 
 app.get("/balance/:address", (req, res) => {
@@ -34,12 +34,12 @@ app.post("/verify", (req, res) => {
 });
 
 app.post("/send", (req, res) => {
-  const { signature, sender, recipient, amount } = req.body;
+  const { sender, recipient, amount, txHash, signature } = req.body;
 
   setInitialBalance(sender);
   setInitialBalance(recipient);
 
-  if (!verifySignature(signature, sender)) {
+  if (!verifySignature(signature, sender, txHash)) {
     res.status(400).send({ message: "Signature is not valid!" });
   } else if (balances[sender] < amount) {
     res.status(400).send({ message: "Not enough funds!" });
@@ -60,8 +60,7 @@ function setInitialBalance(address) {
   }
 }
 
-function verifySignature(signature, address) {
-  const messageHash = '5c8954ab49883c5b77e0f0a6e4b94c630a94e1eecf7771c5e267e5dffd9e2153'; // keccak256 from 'MyWallet'
+function verifySignature(signature, address, messageHash) {
   try {
     const sig = secp256k1.Signature.fromCompact(signature);
     for (let i = 0; i < 4; i++) {
