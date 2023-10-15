@@ -1,85 +1,113 @@
-import React from "react";
-import { LogInComponent } from "./LogInPage"; // Передбачаючи, що це правильний шлях до компонента LogInPage
+// Wallet.jsx
+import React, { useState } from "react";
+import { LogInComponent } from "./LogInPage";
 import { arr } from "../../server/scripts/accounts_array.js";
-import Transfer  from "./Transfer";
+import { Authentificator } from "../../server/scripts/authentificator.js";
+import { RecipientPubK } from "../../server/scripts/recipient_pub_key.js";
+import "./Wallet.scss";
 
+const Wallet = ({ onLogin }) => {
+  // State variables for managing user data
+  const [address, setAddress] = useState("");
+  const [balance, setBalance] = useState(0);
+  const [privateKey, setPrivateKey] = useState("");
+  const [publicKey, setPublicKey] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
 
-class Wallet extends React.Component {
-  
-  constructor(props) {
-    super(props);
+  // Handles user login and updates state
+  const handleLogin = (address, balance, newPrivateKey, newPublicKey) => {
+    setAddress(address);
+    setBalance(balance);
+    setPrivateKey(newPrivateKey);
+    setPublicKey(newPublicKey);
+    onLogin(address, balance, newPublicKey);
+  };
 
-    this.state = {
-      address: "",
-      balance: 0,
-      privatKey: "",
-      publicKey: "",
-      senderAddress:""
-    };
+  // Handles changes to user address input field
+  const handleAddressChange = (evt) => {
+    setAddress(evt.target.value);
+  };
 
-  }
+  // Handles changes to public key input field
+  const handlePublicKeyChange = (evt) => {
+    const newPublicKey = evt.target.value;
+    setPublicKey(newPublicKey);
+    const isAuthorized = Authentificator(address, newPublicKey);
+    // Do something with isAuthorized
+  };
 
-  handleLogin = (address, balance,privatKey,publicKey,senderAddress) => {
-    // Отримання даних з компонента LogInPage та оновлення стану Wallet
-    this.setState({
-      address: address,
-      balance: balance,
-      privatKey: privatKey,
-      publicKey: publicKey,
-      senderAddress:address
-    });
-    //this.props.onLogin(address,balance);
-  }
-  handleAddressChange = (evt) => {
-    const newAddress = evt.target.value;
-    this.setState({
-      
-      address: newAddress
-    });
-    this.props.onAddressChange(newAddress); 
-    console.log(`Address changed to: ${newAddress}`);
-  }
-
-  handleCheckBalance = () => {
-    const foundUser = this.findUserByAddress(this.state.address);
+  // Checks and updates user balance
+  const handleCheckBalance = () => {
+    const foundUser = findUserByAddress(address);
     if (foundUser) {
-      this.setState({ balance: foundUser.balance });
+      setBalance(foundUser.balance);
     } else {
-      // Якщо адрес не знайдено, можна встановити баланс в 0 або вивести повідомлення
-      this.setState({ balance: 0 });
-       alert("Адрес не знайдено");
+      setBalance(0);
+      alert("Address not found");
     }
-  }
+  };
 
-  findUserByAddress = (address) => {
-    // Пошук користувача за адресою у масиві arr
+  // Finds a user by their address in the accounts array
+  const findUserByAddress = (address) => {
     return arr.find((user) => user.address === address);
-  }
-  render() {
-    return (
-      <div className="container wallet">
-        <h1>Your Wallet</h1>
-        <LogInComponent onLogin={this.handleLogin} />
-        <input
-            type="text"
-           // value={this.state.address}
-            onChange={this.handleAddressChange}
+  };
 
-          />
-        <div className="balance">Balance: {this.state.balance}</div>
-         <button onClick={this.handleCheckBalance}>Check Balance</button>
-         {/* <Transfer senderAddress={this.state.address} /> */}
-        <h3>Your Data</h3>
-        <p>Keep your privat key in secret !</p>
-        <div className="usersData">
-       <p> Address: {this.state.address}</p>
-       <p>Balance:  {this.state.balance}  </p> 
-       <p> Public Key:  {this.state.publicKey}</p>
-       <p> Privat Key:  {this.state.privatKey}</p>
-        </div>
+  // Handles changes to recipient's public key input field
+  const handleRecipientPublicKeyChange = (evt) => {
+    const recipientPK = evt.target.value;
+    setRecipientAddress(recipientPK);
+    const foundRecipientPubK = RecipientPubK(recipientPK);
+    // Do something with foundRecipientPubK
+  };
+
+  // JSX for the Wallet component
+  return (
+    <div className="container wallet">
+      <h1>Your Wallet</h1>
+      <LogInComponent onLogin={handleLogin} />
+
+      {/* User address input */}
+      <input
+        placeholder="Type an address, e.g., 0x..."
+        type="text"
+        onChange={handleAddressChange}
+      />
+
+      {/* User public key input */}
+      <input
+        placeholder="Type your public key, e.g., 765dhb..."
+        type="text"
+        onChange={handlePublicKeyChange}
+      />
+
+      {/* Display user balance */}
+      <div className="balance">Balance: {balance}</div>
+
+      {/* Button to check user balance */}
+      <button className="button" onClick={handleCheckBalance}>Check Balance</button>
+
+      <h3>Your Data</h3>
+      <p>Keep your private key secret!</p>
+
+      {/* Display user data */}
+      <div className="usersData">
+        <p>Address: {address}</p>
+        <p>Balance: {balance}</p>
+        <p>Public Key: {publicKey}</p>
+        <p>Private Key: {privateKey}</p>
       </div>
-    );
-  }
-}
+
+      {/* Input for recipient's public key */}
+      <div className="recipientPublicKey">
+        <input
+          placeholder="Type an address, e.g., 0xwad..."
+          type="text"
+          onChange={handleRecipientPublicKeyChange}
+        />
+        {/* Button to perform recipient public key related action */}
+      </div>
+    </div>
+  );
+};
 
 export default Wallet;

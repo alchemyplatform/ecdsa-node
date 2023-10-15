@@ -5,15 +5,16 @@ import { getRandomBytesSync } from "ethereum-cryptography/random.js";
 export const AddressConfig = {
      privatKeyGen (privateKey){
         return privateKey = toHex(secp256k1.utils.randomPrivateKey());
+
     },
      addressGen (address){
-        return address = "0x"+toHex(getRandomBytesSync(20));
+        return address = "0x"+toHex(getRandomBytesSync());
     },
     balanceLog (){
         return 100;
     },
     publicKeyGen (publicKey){
-        return publicKey = toHex(secp256k1.getPublicKey(this.privatKeyGen()));
+        return publicKey = toHex(secp256k1.getPublicKey(secp256k1.utils.randomPrivateKey()));
     }
 
 }
@@ -23,9 +24,9 @@ export default class bebra{
     }
 }
 
-    //  console.log(AddressConfig.addressGen());
-    //  console.log(AddressConfig.balanceLog());
-    //  console.log(AddressConfig.privatKeyGen());
-    //  console.log(AddressConfig.publicKeyGen());
+     console.log(AddressConfig.addressGen());
+     console.log(AddressConfig.balanceLog());
+     console.log(AddressConfig.privatKeyGen());
+     console.log(AddressConfig.publicKeyGen());
 
 

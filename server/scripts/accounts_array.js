@@ -13,7 +13,6 @@ export function UsersData() {
   };
 
   arr.push(userData); // Додаємо об'єкт userData до масиву
-  //debugger;
   return userData;
 }
 
