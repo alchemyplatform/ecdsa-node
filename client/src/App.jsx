@@ -4,18 +4,24 @@ import "./App.scss";
 import { useState } from "react";
 
 function App() {
-  const [balance, setBalance] = useState(0);
-  const [address, setAddress] = useState("");
+  const [loggedInAddress, setLoggedInAddress] = useState(""); 
+  const [loggedInBalance, setLoggedInBalance] = useState(0);
+  const [publicKey, setPublicKey] = useState("");
 
+  const handleLogin = (address,balance,newPublicKey) => {
+    setLoggedInAddress(address);
+    setLoggedInBalance(balance);
+    setPublicKey(newPublicKey);
+  };
+  const handleAddressChange = (address) => {
+    setLoggedInAddress(address);
+  };
   return (
     <div className="app">
-      <Wallet
-        balance={balance}
-        setBalance={setBalance}
-        address={address}
-        setAddress={setAddress}
-      />
-      <Transfer setBalance={setBalance} address={address} />
+     <Wallet onLogin={handleLogin} />
+
+     <Transfer senderAddress={loggedInAddress} publicKey={publicKey}/>
+ 
     </div>
   );
 }
