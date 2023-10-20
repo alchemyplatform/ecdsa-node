@@ -1,9 +1,12 @@
 import { useState } from "react";
 import server from "./server";
+import * as secp from "ethereum-cryptography/secp256k1";
+import { keccak256 } from "ethereum-cryptography/keccak";
 
-function Transfer({ address, setBalance }) {
+function Transfer({ setBalance }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
+  const [privKey, setPrivKey] = useState("");
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
@@ -14,7 +17,7 @@ function Transfer({ address, setBalance }) {
       const {
         data: { balance },
       } = await server.post(`send`, {
-        sender: address,
+        privKey: privKey,
         amount: parseInt(sendAmount),
         recipient,
       });
@@ -38,6 +41,16 @@ function Transfer({ address, setBalance }) {
       </label>
 
       <label>
+        Private Key
+        <input
+          placeholder="88df5a651de97de2b33c7a095b613c5c27b56f6b0c3cf073d947635702e75445"
+          value={privKey}
+          onChange={setValue(setPrivKey)}
+        ></input>
+      </label>
+
+
+      <label>
         Recipient
         <input
           placeholder="Type an address, for example: 0x2"
@@ -49,6 +62,12 @@ function Transfer({ address, setBalance }) {
       <input type="submit" className="button" value="Transfer" />
     </form>
   );
+}
+
+function getAddressFromPrivKey(privKey) {
+  const pubKey = secp.secp256k1.getPublicKey(privKey);
+  const address = '0x' + keccak256(pubKey.slice(1)).slice(-20).join('');
+  return address;
 }
 
 export default Transfer;
