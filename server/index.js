@@ -1,4 +1,5 @@
 const express = require("express");
+const { keyGenerator } = require("./scripts/keyGen")
 const app = express();
 const cors = require("cors");
 const port = 3042;
@@ -6,11 +7,16 @@ const port = 3042;
 app.use(cors());
 app.use(express.json());
 
-const balances = {
-  "0x1": 100,
-  "0x2": 50,
-  "0x3": 75,
-};
+let money = 100
+
+const balances = {};
+
+while(Object.keys(balances).length < 3){
+  balances[keyGenerator()] = money
+  money /= 2
+}
+
+console.log(balances)
 
 app.get("/balance/:address", (req, res) => {
   const { address } = req.params;
