@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const { ethers } = require("ethers");
+
 const port = 3042;
 
 app.use(cors());
@@ -32,18 +34,43 @@ app.get("/balance/:address", (req, res) => {
 
 app.post("/send", (req, res) => {
   // TODO: get a signature from client-side
-  // recover the public address from fignature 
-  const { sender, recipient, amount } = req.body;
+  // recover the public address from fignature
+  const { sender, recipient, amount, signature, message } = req.body;
 
-  setInitialBalance(sender);
-  setInitialBalance(recipient);
+  console.log(req.body);
+  console.log('ethers');
+  console.log(ethers);
+  if (!signature || !message) {
+    return res.status(400).send({ message: "Signature or message not provided." });
+  }
 
-  if (balances[sender] < amount) {
-    res.status(400).send({ message: "Not enough funds!" });
-  } else {
-    balances[sender] -= amount;
-    balances[recipient] += amount;
-    res.send({ balance: balances[sender] });
+  try {
+    // Recover the address from the signature
+    // It's critical to ensure the message you hash and verify here is exactly
+    // the same as the one you signed on the client side, including its structure
+    const utils = ethers.utils;
+    console.log('utils');
+    console.log(utils);
+    // Now, attempt to verify the message with the signature again
+    const recoveredAddress = utils.verifyMessage(message, signature);
+    // TODO original toto is done now add tests and claenup code before submission :)
+    if (recoveredAddress.toLowerCase() !== sender.toLowerCase()) {
+      return res.status(403).send({ message: "Signature verification failed." });
+    }
+
+    setInitialBalance(sender);
+    setInitialBalance(recipient);
+
+    if (balances[sender] < amount) {
+      res.status(400).send({ message: "Not enough funds!" });
+    } else {
+      balances[sender] -= amount;
+      balances[recipient] += amount;
+      res.send({ balance: balances[sender] });
+    }
+  } catch (error) {
+    console.error("Error recovering address from signature:", error);
+    res.status(500).send({ message: "Internal Server Error." });
   }
 });
 

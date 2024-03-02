@@ -31,6 +31,7 @@ function Transfer({ address, setBalance, privateKey }) {
         amount: parseInt(sendAmount),
         recipient,
         signature: flatSig,
+        message: message,
       });
       setBalance(balance);
     } catch (ex) {
