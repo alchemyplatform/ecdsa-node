@@ -1,7 +1,8 @@
 import { useState } from "react";
 import server from "./server";
+import { ethers } from 'ethers';
 
-function Transfer({ address, setBalance }) {
+function Transfer({ address, setBalance, privateKey }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
 
@@ -10,17 +11,30 @@ function Transfer({ address, setBalance }) {
   async function transfer(evt) {
     evt.preventDefault();
 
+    if (!privateKey) {
+      alert("No private key provided.");
+      return;
+    }
+
     try {
+
+      const wallet = new ethers.Wallet(privateKey);
+
+      const message = `Transfer ${sendAmount} to ${recipient}`;
+      const flatSig = await wallet.signMessage(message);
+      console.log('flatSig');
+      console.log(flatSig);
       const {
         data: { balance },
       } = await server.post(`send`, {
         sender: address,
         amount: parseInt(sendAmount),
         recipient,
+        signature: flatSig,
       });
       setBalance(balance);
     } catch (ex) {
-      alert(ex.response.data.message);
+      alert("Error during transfer: " + (ex.response?.data?.message || ex.message));
     }
   }
 
