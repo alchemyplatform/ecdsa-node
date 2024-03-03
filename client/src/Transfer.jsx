@@ -20,8 +20,7 @@ function Transfer({ address, setBalance, privateKey }) {
       const wallet = new ethers.Wallet(privateKey);
       const message = `Transfer ${sendAmount} to ${recipient}`;
       const flatSig = await wallet.signMessage(message);
-      console.log('flatSig');
-      console.log(flatSig);
+
       const {
         data: { balance },
       } = await server.post(`send`, {

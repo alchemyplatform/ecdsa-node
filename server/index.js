@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const { ethers } = require("ethers");
 
-const port = 3042;
+// const port = 3042;
 
 app.use(cors());
 app.use(express.json());
@@ -49,12 +49,14 @@ app.post("/send", (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}!`);
-});
+// app.listen(port, () => {
+//   console.log(`Listening on port ${port}!`);
+// });
 
 function setInitialBalance(address) {
   if (!balances[address]) {
     balances[address] = 0;
   }
 }
+
+module.exports = app;
