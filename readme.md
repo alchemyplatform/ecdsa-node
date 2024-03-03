@@ -24,7 +24,8 @@ The server folder contains a node.js server using [express](https://expressjs.co
 
 1. Open a terminal within the `/server` folder 
 2. Run `npm install` to install all the depedencies 
-3. Run `npm run start` to start server with nodemon
+3. Run `npm run start` to start server with nodemon*
+4. To run tests with coverage use `npm run test:coverage`
 
 The application should connect to the default server port (3042) automatically! 
 
