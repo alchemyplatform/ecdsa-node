@@ -1,15 +1,34 @@
+import React from "react";
+import { ethers } from "ethers";
 import server from "./server";
 
-function Wallet({ address, setAddress, balance, setBalance }) {
+function Wallet({
+  address,
+  setAddress,
+  balance,
+  setBalance,
+  privateKey,
+  setPrivateKey,
+}) {
   async function onChange(evt) {
-    const address = evt.target.value;
-    setAddress(address);
-    if (address) {
-      const {
-        data: { balance },
-      } = await server.get(`balance/${address}`);
-      setBalance(balance);
-    } else {
+    const privateKeyInput = evt.target.value;
+    setPrivateKey(privateKeyInput);
+
+    try {
+      const wallet = new ethers.Wallet(privateKeyInput);
+      const newAddress = wallet.address;
+      setAddress(newAddress);
+
+      if (newAddress) {
+        const {
+          data: { balance },
+        } = await server.get(`balance/${newAddress}`);
+        setBalance(balance);
+      } else {
+        setBalance(0);
+      }
+    } catch (error) {
+      console.error("Error generating public key:", error);
       setBalance(0);
     }
   }
@@ -17,12 +36,15 @@ function Wallet({ address, setAddress, balance, setBalance }) {
   return (
     <div className="container wallet">
       <h1>Your Wallet</h1>
-
       <label>
-        Wallet Address
-        <input placeholder="Type an address, for example: 0x1" value={address} onChange={onChange}></input>
+        Private key
+        <input
+          placeholder="Type a private key, for example: b1a8527873d6b62a786ab65d59da195c6c4a102a9abd96186b69c40407d2f0d9"
+          value={privateKey}
+          onChange={onChange}
+        ></input>
       </label>
-
+      <div>Address: {address}</div>
       <div className="balance">Balance: {balance}</div>
     </div>
   );
