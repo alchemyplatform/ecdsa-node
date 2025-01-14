@@ -1,31 +1,45 @@
-## ECDSA Node
+# ECDSA Node
 
-This project is an example of using a client and server to facilitate transfers between different addresses. Since there is just a single server on the back-end handling transfers, this is clearly very centralized. We won't worry about distributed consensus for this project.
+This project demonstrates a simple digital signature implementation using the Ethereum ECDSA (Elliptic Curve Digital Signature Algorithm) for secure transactions.
 
-However, something that we would like to incoporate is Public Key Cryptography. By using Elliptic Curve Digital Signatures we can make it so the server only allows transfers that have been signed for by the person who owns the associated address.
+## New Features
+- 🔒 Secure private key encryption using AES-256
+- ✅ Wallet creation with automatic key encryption
+- 💫 Transaction signing with encrypted keys
+- 🛡️ Robust error handling and validation
 
-### Video instructions
-For an overview of this project as well as getting started instructions, check out the following video:
+## Security Features
+- Private keys are never stored in plain text
+- AES-256 encryption for key storage
+- Signature verification for all transactions
+- Proper error handling for security-related operations
 
-https://www.loom.com/share/0d3c74890b8e44a5918c4cacb3f646c4
- 
-### Client
+## Prerequisites
+- Node.js and npm installed
+- Environment variables set up (see below)
 
-The client folder contains a [react app](https://reactjs.org/) using [vite](https://vitejs.dev/). To get started, follow these steps:
+## Environment Variables
+Create a `.env` file in the server directory:
+```env
+ENCRYPTION_KEY=your-32-character-encryption-key
+```
 
-1. Open up a terminal in the `/client` folder
-2. Run `npm install` to install all the depedencies
-3. Run `npm run dev` to start the application 
-4. Now you should be able to visit the app at http://127.0.0.1:5173/
+## Getting Started
+1. Clone the repository
+2. Install dependencies:
+```bash
+cd server
+npm install
+```
 
-### Server
+3. Set up your environment variables
+4. Run the tests:
+```bash
+npx ts-node src/scripts/tests/wallet.test.ts
+npx ts-node src/scripts/tests/wallet-edge-cases.test.ts
+```
 
-The server folder contains a node.js server using [express](https://expressjs.com/). To run the server, follow these steps:
-
-1. Open a terminal within the `/server` folder 
-2. Run `npm install` to install all the depedencies 
-3. Run `node index` to start the server 
-
-The application should connect to the default server port (3042) automatically! 
-
-_Hint_ - Use [nodemon](https://www.npmjs.com/package/nodemon) instead of `node` to automatically restart the server on any changes.
+## Security Considerations
+- Keep your ENCRYPTION_KEY secure and never commit it to version control
+- Private keys are encrypted at rest
+- All transactions require valid signatures
