@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = 3042;
+const { Transaction, utils } = require("ethereumjs-tx");
 
 app.use(cors());
 app.use(express.json());
@@ -12,6 +13,11 @@ const balances = {
   "cb062d401405b8ea555c": 75,
 };
 
+// Function to verify a signature
+function verifySignature(messageHash, signature, publicKey) {
+  return Transaction.verifyTransaction(messageHash, signature, publicKey);
+}
+
 app.get("/balance/:address", (req, res) => {
   const { address } = req.params;
   const balance = balances[address] || 0;
@@ -19,7 +25,16 @@ app.get("/balance/:address", (req, res) => {
 });
 
 app.post("/send", (req, res) => {
-  const { sender, recipient, amount } = req.body;
+  const { sender, recipient, amount, signature } = req.body;
+
+  // Verify the signature
+  const messageHash = utils.sha3(utils.toBuffer(`${sender}${recipient}${amount}`));
+  const isValid = verifySignature(messageHash, signature, sender);
+
+  if (!isValid) {
+    res.status(403).send({ message: "Invalid signature" });
+    return;
+  }
 
   setInitialBalance(sender);
   setInitialBalance(recipient);
@@ -34,7 +49,7 @@ app.post("/send", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Listening on port ${port}!`);
+  console.log(`Listening on port ${port}`);
 });
 
 function setInitialBalance(address) {
@@ -42,4 +57,3 @@ function setInitialBalance(address) {
     balances[address] = 0;
   }
 }
-/// new

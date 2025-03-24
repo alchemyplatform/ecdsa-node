@@ -4,6 +4,8 @@ import server from "./server";
 function Transfer({ address, setBalance }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
+  // Dummy signature for demonstration purposes
+  const [dummySignature, setDummySignature] = useState("");
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
@@ -11,13 +13,21 @@ function Transfer({ address, setBalance }) {
     evt.preventDefault();
 
     try {
+      // Simulated transaction data
+      const transactionData = `${address}${recipient}${sendAmount}`;
+
+      // Generate a dummy signature (replace this with actual signature generation)
+      const dummySignatureValue = "0x1234567890123456789012345678901234567890"; // Replace with actual signature
+
       const {
         data: { balance },
       } = await server.post(`send`, {
         sender: address,
         amount: parseInt(sendAmount),
         recipient,
+        signature: dummySignatureValue, // Include the dummy signature in the request
       });
+
       setBalance(balance);
     } catch (ex) {
       alert(ex.response.data.message);
@@ -46,11 +56,14 @@ function Transfer({ address, setBalance }) {
         ></input>
       </label>
 
+      {/* Display the dummy signature */}
+      <div className="signature">
+        Signature: <span>{dummySignature}</span>
+      </div>
+
       <input type="submit" className="button" value="Transfer" />
-      <div className="signature">Mssg:</div>
     </form>
   );
 }
 
 export default Transfer;
-// new
