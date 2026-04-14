@@ -108,7 +108,7 @@ To pass **Phase 2**:
 
 Asking users to input a private key directly into your webapp is a big no-no! 🚫
 
-The next step for YOU to accomplish is to make it so that you can send a signed transaction to the server, via your webapp; the server should the authenticate that transaction by deriving the public key associated with it. If that public key has funds, move the funds to the intended recipient. All of this should be accomplished via digital signatures alone.
+The next step for YOU to accomplish is to make it so that you can send a signed transaction to the server, via your webapp; the server should then authenticate that transaction by deriving the public key associated with it. If that public key has funds, move the funds to the intended recipient. All of this should be accomplished via digital signatures alone.
 
 Hint: In `index.js`, you will want to:
 - get a signature from the client-side application
